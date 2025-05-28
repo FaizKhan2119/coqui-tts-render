@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -11,14 +11,16 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip (recommended)
+# Upgrade pip
 RUN pip install --upgrade pip
 
-# Install TTS
+# Install Coqui TTS
 RUN pip install --no-cache-dir TTS
 
+# Expose server port
 EXPOSE 5002
 
+# Run the TTS server
 CMD ["python3", "-m", "TTS.server.server", \
     "--model_name", "tts_models/en/ljspeech/tacotron2-DDC", \
     "--vocoder_name", "vocoder_models/en/ljspeech/hifigan_v2", \
